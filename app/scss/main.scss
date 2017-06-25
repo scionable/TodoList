@@ -1,0 +1,52 @@
+//HELPERS
+* {
+	box-sizing: border-box;
+}
+.clearfix:after {
+	content: "";
+	display: table;
+	width: 100%;
+	clear: both;
+}
+//HELPERS
+
+#lists {
+	display: flex;
+	justify-content: flex-start;
+	.container {
+		border: 1px solid black;
+		margin: 10px;
+		padding: 10px;
+		.title {
+			margin-bottom: 20px;
+			border: 1px solid black;
+			span {
+				display: inline-block;
+				padding: 5px;
+				margin-right: 10px;
+			}
+		}
+		.controls {
+			margin-bottom: 20px;
+			border: 1px solid black;
+		}
+		.list_item {
+			border: 1px solid blue;
+			margin-bottom: 5px;
+			span {
+				display: inline-block;
+				padding: 5px;
+				margin-right: 10px;
+			}
+		}
+		.trash_block {
+			border: 1px solid green;
+			margin-top: 20px;
+			span {
+				display: inline-block;
+				padding: 5px;
+				margin-right: 10px;
+			}
+		}
+	}
+}
