@@ -155,9 +155,35 @@ addList.addEventListener('click', function(e){
 
 
 /*MODAL CONSTRUCTOR START*/
-function CreateModal() {
+var modalActivator = document.getElementById('button');
 
+function CreateModal(modalName, text) {
+    this.modalName = modalName;
+	this.text = text;
+	this.create = this.createModal();
 }
+
+CreateModal.prototype.createModal = function () {
+	var overlay = document.createElement('div');
+	var modalWrapper = document.createElement('div');
+	var modalTitle = document.createElement('span');
+	var modalText = document.createElement('span');
+	overlay.className = 'modal_overlay';
+	modalWrapper.className = 'modal_wrapper';
+	modalTitle.className = 'modal_title';
+	modalText.className = 'modal_text';
+	modalTitle.innerText = this.modalName;
+	modalText.innerText = this.text;
+	overlay.appendChild(modalWrapper);
+	modalWrapper.appendChild(modalTitle);
+	modalWrapper.appendChild(modalText);
+	document.body.appendChild(overlay);
+	return overlay;
+};
+
+modalActivator.addEventListener('click', function (e) {
+	new CreateModal('Confirm the action', 'Do you really want to delete this item?');
+});
 /*MODAL CONSTRUCTOR END*/
 
 
