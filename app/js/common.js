@@ -71,12 +71,9 @@ TodoList.prototype.createNewItem = function(itemName) {
         self.items.removeChild(newDiv);
         self.moveToTrash(itemName);
     });
-    sortUp.addEventListener('click', function(){
-        self.sortUp();
-    });
-    sortDown.addEventListener('click', function(){
-        self.sortDown();
-    });
+
+	sortUp.addEventListener('click', this.sortUp);
+	sortDown.addEventListener('click', this.sortDown);
     return newDiv;
 };
 
@@ -130,20 +127,38 @@ TodoList.prototype.addButton = function(btnName) {
     return btn;
 };
 
-TodoList.prototype.sortUp = function() {
-    console.log(1);
+TodoList.prototype.sortUp = function(e) {
+    var el = e.target;
+	if (el.parentNode.previousSibling === null) {
+		this.disabled = true;
+	} else {
+		this.disabled = false;
+		el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.previousSibling);
+	}
 };
 
-TodoList.prototype.sortDown = function() {
-    console.log(2);
+TodoList.prototype.sortDown = function(e) {
+	var el = e.target;
+	if (el.parentNode.nextSibling === null) {
+		this.disabled = true;
+	} else {
+		el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.nextSibling.nextSibling);
+		this.disabled = false;
+	}
 };
 /*BUTTONS END*/
 
 addList.addEventListener('click', function(e){
     var name = document.getElementById('list-test').value;
     new TodoList(name, 'lists');
-})
+});
 
+
+/*MODAL CONSTRUCTOR START*/
+function CreateModal() {
+
+}
+/*MODAL CONSTRUCTOR END*/
 
 
 
