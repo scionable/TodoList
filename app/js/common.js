@@ -129,20 +129,19 @@ TodoList.prototype.addButton = function(btnName) {
 
 TodoList.prototype.sortUp = function(e) {
     var el = e.target;
+	el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.previousSibling);
 	if (el.parentNode.previousSibling === null) {
 		this.disabled = true;
-	} else {
-		this.disabled = false;
-		el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.previousSibling);
 	}
 };
 
 TodoList.prototype.sortDown = function(e) {
 	var el = e.target;
+	el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.nextSibling.nextSibling);
 	if (el.parentNode.nextSibling === null) {
 		this.disabled = true;
+		console.log(this);
 	} else {
-		el.parentNode.parentNode.insertBefore(el.parentNode, el.parentNode.nextSibling.nextSibling);
 		this.disabled = false;
 	}
 };
