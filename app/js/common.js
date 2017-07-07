@@ -4,7 +4,7 @@ const addList = document.getElementById('list-add');
 const modalActivator = document.getElementById('button');
 
 /*CREATE BUTTON GLOBAL METHOD*/ 
-function addButton(btnName) {
+function createBtn(btnName) {
     let btn = document.createElement('button');
     btn.innerText = btnName;
     btn.className = 'g_btn';
@@ -14,17 +14,18 @@ function addButton(btnName) {
 
 class TodoList {
     constructor(name, target){
-        this.name = name;
-        this.target = document.getElementById(target);
+        this.name      = name;
+        this.target    = document.getElementById(target);
         this.container = this.createContainer();
     }
     createContainer() {
         let newDiv = document.createElement('div');
+        
         newDiv.className = 'container';
         this.title = this.createTitle();
         this.controls = this.createControls();
-        this.items = document.createElement('div');
         this.trashContainer = this.createTrash();
+        this.items = document.createElement('div');
         newDiv.appendChild(this.title);
         newDiv.appendChild(this.controls);
         newDiv.appendChild(this.items);
@@ -34,75 +35,87 @@ class TodoList {
     }
     createTitle() {
         let newTitle = document.createElement('div');
+        let btnDel   = createBtn('X');
+        let span     = document.createElement('span');
+        let self     = this;
+
         newTitle.className = 'title';
-        let span = document.createElement('span');
         span.innerText = this.name;
         newTitle.appendChild(span);
-        let btn = addButton('X');
-        newTitle.appendChild(btn);
-        let self = this;
-        btn.addEventListener('click', function(){
+        newTitle.appendChild(btnDel);
+        /*EVENT BLOCK*/
+        btnDel.addEventListener('click', function(){
             self.target.removeChild(self.container);
         });
+        /*EVENT BLOCK*/
         return newTitle;
     }
     createControls() {
-        let newDiv = document.createElement('div');
+        let newDiv      = document.createElement('div');
+        let inputText   = document.createElement('input');
+        let addListItem = createBtn('add');
+        let self        = this;
+
         newDiv.className = 'controls';
-        let inputText = document.createElement('input');
-        let btn = addButton('add');
-        let self = this;
-        btn.addEventListener('click', function(){   
+        newDiv.appendChild(inputText);
+        newDiv.appendChild(addListItem);
+        /*EVENT BLOCK*/
+        addListItem.addEventListener('click', function(){   
             self.createNewItem(inputText.value);
             inputText.value = '';
         });
-        newDiv.appendChild(inputText);
-        newDiv.appendChild(btn);
+        /*EVENT BLOCK*/
         return newDiv;
     }
     createNewItem(itemName) {
-        let newDiv = document.createElement('div');
+        let newDiv   = document.createElement('div');
+        let span     = document.createElement('span');
+        let btnDel   = createBtn('del');
+        let sortUp   = createBtn('sortUp');
+        let sortDown = createBtn('sortDown');
+        let self     = this;
+
         newDiv.className = 'list_item';
-        let span = document.createElement('span');
-        let btn = addButton('del');
-        let sortUp = addButton('sortUp');
-        let sortDown = addButton('sortDown');
         span.innerText = itemName;
         newDiv.appendChild(span);
-        newDiv.appendChild(btn);
+        newDiv.appendChild(btnDel);
         newDiv.appendChild(sortUp);
         newDiv.appendChild(sortDown);
         this.items.appendChild(newDiv);
-        let self = this;
-        btn.addEventListener('click', function(){
+        
+        /*EVENT BLOCK*/
+        btnDel.addEventListener('click', function(){
             self.items.removeChild(newDiv);
             self.moveToTrash(itemName);
         });
-
         sortUp.addEventListener('click', this.sortUp);
         sortDown.addEventListener('click', this.sortDown);
+        /*EVENT BLOCK*/
         return newDiv;
     }
     
     /*TRASH CREATE START*/ 
     createTrash() {
+        let newDiv     = document.createElement('div');
+        let span       = document.createElement('span');
+        let btnClear   = createBtn('clean');
+        let btnRestore = createBtn('restore');
+        let self       = this;
+
         this.trashItems = [];
-        let newDiv = document.createElement('div');
+        span.innerText = 'trash: 0';
         newDiv.className = 'trash_block';
-        let span = document.createElement('span');
-        let btn = addButton('clean');
-        let btn2 = addButton('restore');
         newDiv.appendChild(span);
-        newDiv.appendChild(btn);
-        newDiv.appendChild(btn2);
-        let self = this;
-        btn.addEventListener('click', function(){
+        newDiv.appendChild(btnClear);
+        newDiv.appendChild(btnRestore);
+        /*EVENTS BLOCK*/
+        btnClear.addEventListener('click', function(){
             self.delFromTrash();
         });
-        btn2.addEventListener('click', function(){
+        btnRestore.addEventListener('click', function(){
             self.restoreFromTrash();
         });
-        span.innerText = 'trash: 0';
+        /*EVENTS BLOCK*/
         return newDiv;
     }
     moveToTrash(name) {
@@ -144,40 +157,51 @@ addList.addEventListener('click', function(e){
 class CreateModal {
     constructor(modalName, text) {
         this.modalName = modalName;
-        this.text = text;
-        this.create = this.createModal();
+        this.text      = text;
+        this.create    = this.createModal();
     }
     createModal () {
-        let overlay = document.createElement('div');
+        let overlay      = document.createElement('div');
         let modalWrapper = document.createElement('div');
-        let modalTitle = document.createElement('span');
-        let modalText = document.createElement('span');
-        let btnYes = addButton('yes');
-        let btnNo = addButton('no');
-        overlay.className = 'modal_overlay';
+        let modalTitle   = document.createElement('span');
+        let modalText    = document.createElement('span');
+        let btnYes       = createBtn('yes');
+        let btnNo        = createBtn('no');
+
+        overlay.className      = 'modal_overlay';
         modalWrapper.className = 'modal_wrapper';
-        modalTitle.className = 'modal_title';
-        modalText.className = 'modal_text';
+        modalTitle.className   = 'modal_title';
+        modalText.className    = 'modal_text';
+
         modalTitle.innerText = this.modalName;
-        modalText.innerText = this.text;
+        modalText.innerText  = this.text;
+
         overlay.appendChild(modalWrapper);
         modalWrapper.appendChild(modalTitle);
         modalWrapper.appendChild(modalText);
         modalWrapper.appendChild(btnYes);
         modalWrapper.appendChild(btnNo);
         document.body.appendChild(overlay);
-        btnNo.addEventListener('click', this.closeModal );
+        overlay.style.display = 'none';
+        /*EVENTS BLOCK*/
+        modalActivator.addEventListener('click', function (e) {
+            overlay.style.display = 'block';
+        });
+        btnNo.addEventListener('click', function () {
+            overlay.style.display = 'none';
+        });
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) {
+                overlay.style.display = 'none';
+            }
+        });
+        /*EVENTS BLOCK*/
         return overlay;
-    }
-    closeModal () {
-        document.getElementsByClassName('modal_overlay');
-        console.log(document.getElementsByClassName('modal_overlay'));
     }
 }
 
-modalActivator.addEventListener('click', function (e) {
-	new CreateModal('Confirm the action', 'Do you really want to delete this item?');
-});
+new CreateModal('Confirm the action', 'Do you really want to delete this item?');
+
 /*MODAL CONSTRUCTOR END*/
 
 
